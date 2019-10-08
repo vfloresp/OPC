@@ -1,7 +1,7 @@
 TITLE *MASM Template	(mult.asm)*
 
 ; Descripcion:
-; Uso de Multiplicacion
+; Ejercicio 1 Tarea BC
 ; 
 
 INCLUDE \masm32\Irvine\Irvine32.inc
@@ -10,25 +10,25 @@ INCLUDELIB \masm32\Irvine\User32.lib
 INCLUDELIB \masm32\Irvine\Kernel32.lib
 
 .DATA
-adios    BYTE "ADIOS", 0
+A  SDWORD 7
+B  LABEL  SDWORD
+D  SDWORD -15
+R  LABEL  SDWORD
 
 .CODE
 ; Procedimiento principal
 main PROC
 
-    mov EAX, 0
-    mov EBX, 0
-    mov EDX, 0
-    mov AX, 1234h
-    mov BX, 100h
-    mul BX          ; DX:AX
+    MOV EAX, A
+    MOV EBX, -1
+    MUL EBX
     call DumpRegs
    
     ; ++++++++++++
 
-    mov EDX, OFFSET adios        ; despliega "ADIOS"
-    call WriteString
-    call CrLf
+    ;mov EDX, OFFSET adios       
+    ;call WriteString
+    ;call CrLf
         
     exit
 main ENDP
