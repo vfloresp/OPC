@@ -14,6 +14,7 @@ dato2  BYTE " temperatura: ",0
 res    BYTE "Minimo de las temperaturas: ",0
 error  BYTE "ERROR por n<1 o n>10 "
 adios Byte "Adios ",0
+intercambios BYTE "Total de intercambios: ",0
 
 
 ; Variables
@@ -22,8 +23,7 @@ n DWORD 0
 nDec DWORD 0
 temp SDWORD 0
 array SDWORD 10 dup(?)
-iArr DWORD OFFSET array
-iArr2 DWORD OFFSET array
+cont DWORD 0
 
 .CODE
 ; Procedimiento principal
@@ -42,6 +42,7 @@ main PROC
 
     ;Ciclo para leer los datos
     mov EBX, 0
+    mov ECX, 0
     .WHILE EBX<n
         inc EBX
         mov edx, OFFSET dato1
@@ -55,58 +56,62 @@ main PROC
         .IF EAX<min
             mov min, EAX
         .ENDIF
-        mov array[EBX], EAX
-        add iArr, TYPE array
         ;Guarda los valores en el arreglo
+        mov array[ECX], EAX
+        add ECX, TYPE array
+    .ENDW
 
-    .ENDW
-    mov EBX, 0
-    mov iArr, OFFSET array
-    .WHILE EBX < n
-        mov EAX, array[EBX]
-        call WriteInt
-        call crlf
-        inc EBX
-    .ENDW
 
     ;Ordenamiento seleccion directa
-    mov iArr, OFFSET array
     mov EAX, n
     mov nDec, EAX
     dec nDec
+    mov EAX, TYPE array
+    mul n
+    mov n, EAX
+    mul nDec
+    mov nDec, EAX
     mov EBX, 0
     .WHILE EBX < nDec
         mov ECX, EBX
-        inc ECX
-        mov EAX, iArr
-        add EAX, TYPE array
-        mov [iArr2], EAX
+        add ECX, TYPE array
         .WHILE ECX < n
-            mov EDX, [iArr2]
-            .iF [iArr] > EDX
-                xchg [iArr], EDX
-                mov [iArr2], EDX
+            mov EAX, array[ECX]
+            .iF array[EBX] > EAX
+                xchg array[EBX], EAX
+                mov array[ECX], EAX
+                inc cont
             .ENDIF
-            inc ECX
-            add iArr2, TYPE array
+            add ECX, TYPE array
         .ENDW
-        inc EBX
-        add iArr, TYPE array
+        add EBX, TYPE array
     .ENDW
 
     mov EBX, 0
-    mov iArr, OFFSET array
+    mov ECX, 1
     .WHILE EBX < n
-        mov EAX, [iArr]
+        mov EAX, ECX
+        call WriteInt
+        mov EDX, OFFSET dato2
+        call WriteString
+        mov EAX, array[EBX]
         call WriteInt
         call crlf
-        inc EBX
+        add EBX, TYPE array
+        inc ECX
     .ENDW
 
     ;Muestra temperatura minima
     mov edx, OFFSET res
     call WriteString
     mov EAX, min
+    call WriteInt
+    call crlf
+
+    ;Muestra total de intercambios
+    mov EDX, OFFSET intercambios
+    call WriteString
+    mov EAX, cont
     call WriteInt
     call crlf
     JMP fin
