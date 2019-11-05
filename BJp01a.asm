@@ -35,7 +35,7 @@ main PROC
     mov EBX, 1    ; contador
         	
     ; ***** COMPLETAR
-    .WHILE EBX <= LEGHTOF arraySD
+    .WHILE EBX <= LENGTHOF arraySD
         add SDWORD PTR [ESI], 10h
         add ECX, [ESI] ; acumulando
 
