@@ -14,10 +14,20 @@ strDato1 BYTE "Introduzca el valor en grados para el que desea calular sin(x)",0
 strDato2 BYTE "Introduzca el valor en radianes para el que desea calular sin(x)",0
 strDato3 BYTE "Introduzca el valor entre 0 y 360 hasta el que desea generar la tabla de sin(x)",0
 strFin BYTE "ADIOS",0
+
+;variables
 opcion DWORD ?
+valX REAL8 ?
+valSin REAL8 ?
+valPi REAL8 3.14159
+val180 REAL8 180.0
+dirRet DWORD ?
+valn DWORD ?
+valParidad SDWORD ?
 
 .code
 main PROC
+finit   ; starts up the FPU
 ;Ciclo para mostrar las opciones del menu 
 menu:
     mov EDX, offset strMenu
@@ -54,21 +64,24 @@ op1:
     mov EDX, offset strDato1
     call WriteString
     call CrLf
-    call ReadInt
+    call ReadFloat
+    call grdArad
+    call seno
     JMP menu
 ;Calculo de sin(x) para x en radianes
 op2:
     mov EDX, offset strDato2
     call WriteString
     call CrLf
-    call ReadInt
+    call ReadFloat
+    call seno
     JMP menu
 ;Calculo de tabla de sin(x) hasta el valor x 
 op3:
     mov EDX, offset strDato3
     call WriteString
     call CrLf
-    call ReadInt
+    call ReadFloat
     JMP menu
 ;Termino de la ejecucion
 fin:
@@ -80,32 +93,60 @@ main ENDP
 
 ;Procedimiento para calcular la funcion trigonometrica de sin(x)
 seno PROC
-
+    mov EAX,7
+    push EAX
+    call signo
+    pop EAX
+    call WriteInt
+    
+    RET
 seno ENDP
 
 ;Procedimiento para calcular (2n-1)!
 factorial PROC
-
+    
+    RET
 factorial ENDP
 
-;Procedimiento para calcular (-1)^n
 signo PROC
-
+; Calcula (-1)^n
+; Recibe:
+;       Stack: n
+; Regresa
+;       Stack: (-1)^n
+; Utiliza la variable dirRet
+    pop dirRet
+    pop EAX
+    shr EAX,1
+    jc impar
+    mov EAX, 1
+    JMP final
+impar:
+    mov EAX,-1
+final:
+    push EAX
+    push dirRet
+    RET
 signo ENDP
 
 ;Procedimiento para calcular x^(2n+1)
 potencia PROC
-
+    
+    RET
 potencia ENDP
 
 ;Procedimiento para pasar grados a radianes
 grdArad PROC
-
+    fmul valPi
+    fdiv val180
+    RET
 grdArad ENDP
 
 ;Procedimiento para pasar radianes a grados
 radAgrad PROC
-
+    fmul val180
+    fdiv valPi
+    RET
 radAgrad ENDP
 
 END main
