@@ -5,12 +5,7 @@
 ; con el byte menos significativo almacenado en la direccion mas baja.
 ; El resultado quedara en el arreglo "suma". 
 
-;INCLUDE myIrvine.inc
-INCLUDE \masm32\Irvine\Irvine32.inc
-INCLUDELIB \masm32\Irvine\Irvine32.lib
-INCLUDELIB \masm32\Irvine\User32.lib
-INCLUDELIB \masm32\Irvine\Kernel32.lib
-
+INCLUDE myIrvine.inc
 
 .DATA
 op1 BYTE 20h,34h,12h,98h,74h,06h,0A4h,0B2h,0A2h
